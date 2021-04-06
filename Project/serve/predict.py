@@ -75,9 +75,13 @@ def predict_fn(input_data, model):
     
     # As we did in the "More testing" section of the "Sage Maker Projec.ipynb"
     #test_review_words = review_to_words(test_review)
-    input_data_words = review_to_words(input_data)
+    input_data = review_to_words(input_data)
     #test_review_words, test_review_len = convert_and_pad(word_dict, test_review_words)
-    data_X, data_len = convert_and_pad(word_dict, input_data_words)
+    
+    # Check whether word_dict exist
+    #print(list(model.word_dict)[:2])
+    
+    data_X, data_len = convert_and_pad(model.word_dict, input_data) 
 
     # Using data_X and data_len we construct an appropriate input tensor. Remember
     # that our model expects input data of the form 'len, review[500]'.
@@ -93,6 +97,6 @@ def predict_fn(input_data, model):
     # TODO: Compute the result of applying the model to the input data. The variable `result` should
     #       be a numpy array which contains a single integer which is either 1 or 0
 
-    result = model(data)
+    result = int(model(data).detach().numpy().round())
 
     return result
